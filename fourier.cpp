@@ -13,13 +13,15 @@
  *       values of N.
  */
 
-void dft(const double* x, double* ReX, double* ImX, int n) {
+void Dft(const double* x, double* ReX, double* ImX, int n) {
     // Clear out ReX, ImX as they will act as accumulators
     for (int i = 0; i <= n/2; i++) {
         ReX[i] = 0;
         ImX[i] = 0;
     }
 
+
+    // Perform transform
     for (int i = 0; i <= n/2; i++) {
         for (int j = 0; j < n; j++) {
             ReX[i] += std::cos(2*M_PI*i*j/n) * x[j];
@@ -28,13 +30,13 @@ void dft(const double* x, double* ReX, double* ImX, int n) {
     }
 }
 
-void inverse_dft(double* x, const double* ReX, const double* ImX, int n) {
-    // x as it will act as an accumulator
+void InverseDft(double* x, const double* ReX, const double* ImX, int n) {
+    // Zero x as it will act as an accumulator
     for (int i = 0; i <= n/2; i++) {
         x[i] = 0;
     }
 
-
+    // Perform transformation
     int scaling_factor;
     for (int i = 0; i <= n/2; i++) {
         scaling_factor = (i == 0 || i == n/2) ? n : n/2;
@@ -46,7 +48,7 @@ void inverse_dft(double* x, const double* ReX, const double* ImX, int n) {
     }
 }
 
-void print_array(double* x, int n, int prec = 3) {
+void PrintArray(double* x, int n, int prec = 3) {
     std::cout.precision(prec);
     std::cout << std::fixed;
     std::cout << "{" << x[0];
@@ -66,26 +68,26 @@ int main(int argc, char** argv) {
 
     std::cout << "Before DFT" << std::endl;
 
-    print_array(x, 16);
-    print_array(ReX, 9);
-    print_array(ImX, 9);
+    PrintArray(x, 16);
+    PrintArray(ReX, 9);
+    PrintArray(ImX, 9);
 
     std::cout << std::endl;
 
-    dft(x, ReX, ImX, 16);
+    Dft(x, ReX, ImX, 16);
 
     std::cout << "After DFT: " << std::endl;
-    print_array(x, 16);
-    print_array(ReX, 9);
-    print_array(ImX, 9);
+    PrintArray(x, 16);
+    PrintArray(ReX, 9);
+    PrintArray(ImX, 9);
 
     double rebuilt_x[16];
-    inverse_dft(rebuilt_x, ReX, ImX, 16);
+    InverseDft(rebuilt_x, ReX, ImX, 16);
 
     std::cout << "After inverse DFT: " << std::endl;
-    print_array(rebuilt_x, 16);
-    print_array(ReX, 9);
-    print_array(ImX, 9);
+    PrintArray(rebuilt_x, 16);
+    PrintArray(ReX, 9);
+    PrintArray(ImX, 9);
 
     return 0;
 }
